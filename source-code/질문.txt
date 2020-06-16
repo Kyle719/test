@@ -1,0 +1,14 @@
+TensorFlow Deployment 있던데
+JS, Lite, Datasets, Serving 내용도 알아야?
+
+
+콜백함수
+early stopping, learning rate scheduler 써도 노상관?
+
+학습된 모델을 제출할때, 
+SavedModel, h5, checkpoint 등 형태로 저장시킨 후 제출?
+아니면 그냥 model.fit 끝나고나서 제출하면 되는거?
+
+
+
+

@@ -1,0 +1,23 @@
+
+FNN 1문제 -> MNIST
+CNN 2문제 -> cat/dog 문제가 학습시간이 좀 걸림.
+RNN 1문제
+TS  1문제 -> TDC git 태양 흑점 문제 나왔었음.
+
+
+환경
+시험 시작전 파이참 환경 구성.
+시험 시작하면 파이참 환경에 시험 관련 파일들이 쭉 들어옴.
+거기서 model 생성하고
+submit 버튼이 있는데 누르면
+test data 로 accuracy 측정해서 채점함
+
+
+문제 풀이 시 제약조건들이 있음.
+ex)
+레이어 중에서 normalization layer 는 수정하지 마시오
+tokenizer 함수 이거는 수정하지 마시오
+
+
+
+

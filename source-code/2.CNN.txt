@@ -1,0 +1,228 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+1. 데이터
+
+lgcns edu 실습 6-2 나옴, tdc 2-2-2 가 더 좋음.
+cat/dog 데이터 다운받았을때
+cats_and_dogs_filtered
+|__ train
+    |______ cats: [cat.0.jpg, cat.1.jpg, cat.2.jpg ....]
+    |______ dogs: [dog.0.jpg, dog.1.jpg, dog.2.jpg ...]
+|__ validation
+    |______ cats: [cat.2000.jpg, cat.2001.jpg, cat.2002.jpg ....]
+    |______ dogs: [dog.2000.jpg, dog.2001.jpg, dog.2002.jpg ...]
+train_dir = os.path.join(PATH, 'train')
+os 라이브러리 활용
+디렉토리 설정 os.path.join
+디렉토리 내 파일 목록들 os.listdir
+디렉토리 내 파일 목록 개수 len(os.listdir)
+
+
+다운을 여기다가 받겠다!
+다운받고, zip 풀고, os.join 으로 directory 설정, 파일 개수 확인, 파일 샘플로 몇개 확인, ...
+--> tdc 2-2-2 에 나옴.
+!wget --no-check-certificate \
+  https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip \
+  -O /tmp/cats_and_dogs_filtered.zip
+
+이미지 path 넘겨주면
+tmp = tf.keras.preprocessing.image.load_img(path, target_size=(150, 150))   # 150,150 resize
+tmp = tf.keras.preprocessing.image.img_to_array(tmp)    # array로 변환
+tmp = tmp/255.  # rescale
+tmp = np.expand_dims(tmp, axis=0)   # 차원 추가 사진 몇장 알려주는 차원.
+
+
+
+from keras.preprocessing import image
+image.load_img(path, target_size=(150, 150))
+--> 이미지 로드하면서 동시에 reshape 처리
+tdc 2-8-2
+
+
+ImageDataGenerator
+rescale 하면서 generator 선언하고
+flow_from_directory 함수 이용해서
+배치 단위로 나뉘어진 데이터 생성.
+--> 이거 쓸때는 학습 시 model.fit 대신 model.fit_generator 씀.
+
+데이터 확인 -> next 기능은 datset에서 batch를 반환한다.
+next 함수의 반환값은 (x_train, y_train), x_train은 training image이며 y_train은 label이다
+배열 형태로 나옴. 
+___[:5] 이런식으로 32개 배치 중 5개만 골라올수 있음.
+___[0].shape 으로 데이터 형식 확인 가능.
+
+
+Augmentation
+lgcns edu 6-2 실습 MISSION #12
+tdc 2-4-2
+
+
+그래서 들어가는 이미지 정보
+mnist.load_data() 불러온걸 reshape(28,28) 하면 아래처럼 2차원 numpy 행렬이 준비됨.
+[
+    [0 1 2 ... 27]
+    [0 1 2 ... 27]
+    ...
+    [0 1 2 ... 27]
+]
+
+RGB 이미지는? shape (28,28,3) 이면 아래처럼 3차원 numpy 행렬이 준비됨.
+[
+    [[0 1 2] [0 1 2]  ... [0 1 2]]
+    [[0 1 2] [0 1 2]  ... [0 1 2]]
+    ...
+    [[0 1 2] [0 1 2]  ... [0 1 2]]
+]
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+2. 모델
+
+
+모델 구조 확인 2가지 방법
+model_conv2.summary()
+tf.keras.utils.plot_model(model_conv2, show_shapes=True)
+
+모델
+model_conv2.add(Conv2D(10, kernel_size=(3,3), input_shape=(28, 28, 1)))    # MNIST data : 가로세로 28픽셀, 회색조 이미지
+kernel_size 직사각형도 가능함.
+
+모델.add 방식
+final_model1 = Sequential()
+final_model1.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(32, 32, 3)))
+final_model1.add(MaxPooling2D(pool_size=(2, 2)))
+
+모델 sequential(...) 방식
+model = Sequential([
+    Conv2D(16, 3, padding='same', activation='relu', input_shape=(IMG_HEIGHT, IMG_WIDTH ,3)),
+    MaxPooling2D(),
+    Flatten(),
+    Dense(512, activation='relu'),
+    Dense(1, activation='sigmoid')
+])
+
+final_model1.add(Conv2D(64, kernel_size=3, activation='relu', input_shape=(32, 32, 3)))
+
+첫 레이어는 꼭 input_shape 을 써줘야한다.
+
+padding 조건
+- padding="same" 하면 conv 통과 전후 shape 안줄어듬. 동일함.
+- padding="valid" 하면 패딩 없는것임. default 값.
+
+activation 방식
+- activation='relu'
+- 
+
+Activation Layer 따로 뺄수 있음.
+final_model1.add(Conv2D(64, kernel_size=3, input_shape=(32, 32, 3)))
+final_model1.add(BatchNormalization())
+final_model1.add(Activation(activation='relu'))
+
+compile 할때 metrics 추가해서 검증 로그 볼수있음
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.BinaryCrossentropy(),
+              metrics=['accuracy'])
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+3. 학습
+
+ImageDataGenerator 쓸때 fit_generator 였는데 이제 fit 도 지원됨.
+history = model.fit_generator(
+    train_data_gen,
+    steps_per_epoch=total_train // batch_size,
+    epochs=epochs,
+    validation_data=val_data_gen,
+    validation_steps=total_val // batch_size
+)
+
+history 값들 활용.
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+loss=history.history['loss']
+val_loss=history.history['val_loss']
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+4. 결과 시각화
+
+epochs_range = range(epochs)
+
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, acc, label='Training Accuracy')
+plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+plt.legend(loc='lower right')
+plt.title('Training and Validation Accuracy')
+
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, loss, label='Training Loss')
+plt.plot(epochs_range, val_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Loss')
+plt.show()
+
+
+convnet 각각 레이어마다의 출력 결과
+tdc 2-2-2 나옴.
+successive_outputs = [layer.output for layer in model.layers[1:]]
+visualization_model = tf.keras.models.Model(inputs = model.input, outputs = successive_outputs)
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+* Transfer Learning
+
+output layer 의 output 값의 shape 을 알아내서 다음 레이어의 input 에 넣어줄 필요 없음.
+last_layer.output 함수가 있음.
+이걸로 그냥 keras subclassing 하면 됨.
+
+tdc 2-6-3
+
+모델 구조 가져오고,
+load_weights
+layer.trainable = False
+last_layer = pre_trained_model.get_layer('mixed7')
+last_output = last_layer.output
+last_output 에 이어서 flatten, dense 층 추가
+model.compile
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+lgcns
+conv, maxpool outputshape 계산하는거 나옴.
+batchnorm
+cifar10 데이터 씀
+
+
+tdc
+2-2-2 catdog basic
+2-4-2 catdog + Augmentation
+2-4-4 horse human
+2-6-3 transfer learning
+2-8-2 rock paper scissors
+
+
+tensorflow
+https://www.tensorflow.org/tutorials/images/cnn
+cnn
+image classification
+tf hub
+transfer learning
+augmentation
+segmentation
+object detection
+
+

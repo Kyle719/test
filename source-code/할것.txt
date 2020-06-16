@@ -1,0 +1,15 @@
+
+콜백함수들 뭐더있는지 확인해보기
+early stopping, learning rate sheduler, ...
+
+모델 저장
+save_best_model - 이용해서 초기 에폭때 제출해버리기
+
+
+
+
+
+
+
+
+

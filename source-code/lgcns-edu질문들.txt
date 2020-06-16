@@ -1,0 +1,58 @@
+TCT AI
+
+weight initialization
+가우시안 vs Xavier 두가지 방식 썼을때의 차이점
+
+optimizer
+- schedules
+  - LearningRateSchedule 클래스 활용하기
+https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/schedules
+
+FNN
+MNIST 모델 만들기 (실습)
+CNN
+MNIST 모델 만들기 (실습)
+
+weight decay
+l1 regulazation
+l2 regulazation
+
+
+pre training, trnasfer learning 장점
+
+
+
+
+
+질문
+optimizer 에 있는 serialize, deserialize
+weight decay 에서 전체 노드에 적용? 선정해서? 선정이면 weight 는 어떤 기준으로 선정?
+레이어만 선택하면 그 중에서 필요없는 노드가 알아서 선택됨
+
+callback 에폭마다 말고 배치마다 하려면?
+FOR 문 만들어서 알아서 해야됨.
+
+validation acc 이 train acc 보다 높으면 underfitting? N
+
+convolution fileter : 32x32x3 이미지에 5x5x3 이 아닌 5x5x1 을 하면 28x28x3 이 나옴?
+불가능함. 차원 맞춰줘야함.
+
+convolution 층의 relu 에서도 학습이 일어남? N
+
+conv filet 10장 설정하면 종류는 어떻게 고르나?
+못고름. 
+
+conv filter 정사각형말고 직사각형도 가능? Y
+pooling 도? Y
+
+conv1 5,max1
+conv2 3,max2
+conv3,max3
+...
+1, 2 순서 바꿔도 상관 없음? Y
+
+
+
+더 알아볼 것들
+padding 조건들
+

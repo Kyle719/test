@@ -1,0 +1,27 @@
+
+
+* matplotlib
+plt.plot(history.epoch, history.history['loss'], label='Train Error')  
+plot(x축, y축, 라벨)
+
+
+1. 선형회귀
+lgcns
+데이터 형식이 그냥 파이썬 리스트
+tdc
+데이터 형식이 numpy 로 되어있음.
+
+2. FNN
+lgcns
+subclassing, gradienttape 방식으로 돼있음
+shape 차원 1개 더 추가해서 씀
+
+tdc
+fashion mnist data 를 쓰고 있음.
+Exercise 8번에 callback 함수 customizing 해서 쓰는거 나옴.
+
+tensorflow
+mnist - 동일
+fashion mnist - data 전처리, 평가결과 plot 자세히 나와있음.
+
+
