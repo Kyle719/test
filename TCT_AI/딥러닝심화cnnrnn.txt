@@ -1,0 +1,50 @@
+1. cnn
+2. rnn
+= = = = = = = = = = = = = = = = = = =
+ = = = = = = = = = = = = = = = = = =
+= = = = = = = = = = = = = = = = = = =
+
+
+
+* convolutional neural network
+colvolution + subsampling(pooling) + full connection
+
+weight 공유하여 공간 정보 들어감
+FCN 비해 parameter 수 크게 감소하여 overfitting 방지
+
+convolution / pooling
+
+convolution
+2차원
+(원래길이 + 2*패딩 - 필터길이)/스트라이드 + 1
+3차원
+2차원 이미지들 RGB 채널이 3이면 필터의 채널도 3으로 같아야함.
+h x w x c 이미지에 h1 x w1 x c 필터 씌워서 아웃풋은 h2 x w2 2차원으로 나옴.
+4차원(?) 배치처리
+N C H W 에다가 FN C FH FW 필터 씌우면 아웃풋은 N FN OH OW
+
+https://data-scientist-brian-kim.tistory.com/86
+https://deep-learning-study.tistory.com/180
+https://deep-learning-study.tistory.com/182
+
+
+pooling
+(원래길이 + 2*패딩 - 필터길이)/스트라이드 + 1 
+동일한데 3차원일때 채널 수에 영향을 주지 않음.
+h x w x c 이미지에 h1 x w1 풀링해서 아웃풋은 h2 x w2 x c 로 나옴.
+
+tensorflow 코드도.
+
+
+* 이미지 shape 어떤식으로 들어오던간에 아래것들 통과하면 fnn 들어가기 전에 노드 수를 통일시켜주는 것들이 있다
+- pooling to 3x3 grid
+- global average pooling (1x1x1000)
+
+
+
+* rnn, transformer, bert
+
+
+
+
+

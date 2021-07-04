@@ -1,0 +1,17 @@
+전이학습
+https://www.tensorflow.org/tutorials/images/transfer_learning?hl=ko
+https://www.tensorflow.org/guide/keras/transfer_learning?hl=ko
+
+ 
+
+데이터 제너레이터
+https://jins-sw.tistory.com/14
+https://www.tensorflow.org/guide/data
+https://www.tensorflow.org/guide/data_performance
+
+
+
+subnetwork 모델 만드는 문제
+
+
+weight 값 get_weight 였나 해서 값 얻어서 feature maps 특성 살펴보기

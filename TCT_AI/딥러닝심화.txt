@@ -1,0 +1,84 @@
+1. activation function
+2. loss function
+3. optimizer
+4. regularization overfitting/underfitting
+5. cnn
+6. rnn
+= = = = = = = = = = = = = = = = = = =
+ = = = = = = = = = = = = = = = = = =
+= = = = = = = = = = = = = = = = = = =
+
+
+
+* activation function
+tanh, sigmoid -> gradient vanishing 으로 loss(cost) 가 느리게 떨어진다 학습이 더디다 
+relu -> 반대.
+
+* cost/loss function
+quadratic cost -> loss(cost) 가 느리게 떨어진다 학습이 더디다 
+cross entropy cost -> 반대.
+
+
+* optimizer
+
+* weight initialization
+초기화 잘못하면 학습이 잘안되거나 아예 안될수도 있다
+모두 동일한 값으로 초기화하면 뉴런들이 동일한 출력값을 내보내고
+역전파때도 gradient 값들이 동일해져서 똑같이 값이 update 된다.
+= 학습이 되지 않는다
+activation function 을 통과 후 값들의 분포를 적절히 해주기 위해 아래 방법들을 쓴다.
+왜? activaiton function 통과 후 값이 만약 0과 1에 가깝게 치우쳐져 있는데
+activation function 이 sigmoid 나 tanh 이면
+해당 위치에서의 기울기 값이 0에 가까워지게 된다.
+= 학습이 매우 더디게 일어난다
+
+- LeCun normal initialization
+relu 나오기전 많이씀
+- Xavier initialization
+activation function 이 sigmoid 또는 tanh 처럼 선형일때 좋음
+activation function 통과 후 값들의 분포가 0~1 사이에 광범위하게 퍼져 분포함.
+앞계층의 노드가 n개 일때 root(1/n) 표준편차를 갖도록 weight 를 분포시켜줌.
+- He initialization
+activation function 이 relu 일때 좋음
+앞계층의 노드가 n개 일때 root(2/n) 표준편차를 갖도록 weight 를 분포시켜줌.
+
+근데 activation function 뒤에 batch normalization 레이어를 넣어줘서 weight 값의 분포를 균등하게 만들어주게 되면 위 문제들이 사라짐. weight 초기화 신경 안써도 됨.
+
+
+
+* overfitting, underfitting
+
+underfitting
+모델이 training set 에 대해 충분히 낮은 training error 에 도달하지 못하여 발생함. 그래프 보여주고 training loss 가 아직 덜 갔으면 under.
+
+overfitting
+training error, test error 간의 gap 이 너무 큰 경우
+태스크를 일반화하지 못하고 알려준 데이터를 달달 외웠다
+그래프 보여주고 trainin loss 는 충분히 갔는데 valid 랑 차이 크면 over.
+
+
+
+* regularization
+정의 : generalization error 를 감소시키기위한 노력
+= overfitting 방지 위한 노력
+
+overfitting 해결하기 위해서 (underfitting 은 반대)
+- 모델의 capacity 를 낮춘다
+: hidden layer 의 노드 수 줄이거나 레이어 수 줄임
+weight decay (불필요한 노드의 weight 값을 0근처로 유도)
+cnn 이면 커널수를 늘린다, 레이어 수를 늘린다
+early stopping
+- data augmentation
+- ensemble model
+: 다른 architecture / hyperparameter / training step / initialization
+- dropout
+: 매학습 p의 확률로 뉴런을 drop. p를 늘린다
+앙상블과 같은 효과
+- batch normalization
+: gradient vanishing, gradient exploding 의 이유를 internal covariance shift 로 판단하여 해결하기 위한 방법
+특정 hidden layer 직전에 BN 추가해서 input 을 변경한 뒤 activation function 에 넣어준다
+- epoch 수를 줄인다
+- L2 regularization term 람다값을 줄인다
+- bias 가 낮고 variance 가 높을때 overfitting 이 보임.
+
+
