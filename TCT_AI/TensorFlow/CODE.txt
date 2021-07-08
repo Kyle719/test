@@ -15,5 +15,6 @@ subnetwork 모델 만드는 문제
 기출 문제 거의 똑같이 나왔음
 
 NLP 도 이제 공부하자
+뭐야~~
 
 weight 값 get_weight 였나 해서 값 얻어서 feature maps 특성 살펴보기
